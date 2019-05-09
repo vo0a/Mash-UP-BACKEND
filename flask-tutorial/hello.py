@@ -1,5 +1,8 @@
+
 from flask import Flask, send_from_directory, request, json, redirect
 import datetime
+
+image_dir = "images"
 
 app = Flask(__name__)
 
@@ -9,15 +12,15 @@ def hello_world():
 
 @app.route("/upload", methods=['POST'])
 def updoad():
-	f = request.files["file"]
-	path = "images/" + f.filename
-	f.save(path)
+	image_file.save = request.files["file"]
+	path = "{0}/{1}".format(image_dir, f.filename)
+	image_file.save(path)
 	history()
 	return json.dumps({"path":path})
 
 @app.route("/images/<name>")
 def image(name):
-	return send_from_directory(directory="images", filename=name)
+	return send_from_directory(directory="image_dir", filename=name)
 	
 @app.route("/history")
 def history():

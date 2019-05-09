@@ -1,15 +1,30 @@
 ﻿from flask import Flask, send_from_directory, request, json, redirect
-import datetime
+import datetime, sqlite3
+
 
 image_dir = "images"
-log_dir = "logs/upload-{0}.log".format(datetime.datetime.now())
+
+#있으면 해당 파일 오픈, 없으면 새 파일 생성
+database_file = 'upload_result.db' 
 
 app = Flask(__name__)
 
-def write_log(result, path):
-	with open(log_dir, 'a+') as log_file:
-		log_content = "{0}|{1}|{2}\n".format(datetime.datetime.now(), result, path) 
-		log_file.write(log_content)
+def write_log(database_file, result, path):
+	try:
+		# SQLite DB 연결
+		con = sqlite3.connect(database_file)
+		
+		# Connection 으로부터 Cursor 생성
+		cur = con.cursor()
+		
+		# SQL 쿼리 실행
+		cur.execute("INSERT INTO upload_result(date, result, path) VALUES (?,?,?)", \
+			(datetime.datetime.now(), result, path))
+		con.commit()
+	except:
+		con.rollback()
+	finally:
+		con.close()
 		
 @app.route('/')
 def hello_world():
@@ -32,7 +47,7 @@ def upload():
 	path = "{0}/{1}".format(image_dir, image_file.filename)
 	image_file.save(path)
 	
-	write_log("Success", path)
+	write_log(database_file, "Success", path)
 	return json.dumps({"path":path}), 200
 
 @app.route("/images/<name>")

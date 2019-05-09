@@ -18,8 +18,7 @@ def write_log(database_file, result, path):
 		cur = con.cursor()
 		
 		# SQL 쿼리 실행
-		cur.execute("INSERT INTO upload_result(date, result, path) VALUES (?,?,?)", \
-			(datetime.datetime.now(), result, path))
+		cur.execute("INSERT INTO upload_result(date, result, path) VALUES (?,?,?)", (datetime.datetime.now(), result, path))
 		con.commit()
 	except:
 		con.rollback()

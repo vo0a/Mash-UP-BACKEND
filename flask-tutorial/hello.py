@@ -1,4 +1,4 @@
-
+Ôªø
 from flask import Flask, send_from_directory, request, json, redirect
 import datetime
 
@@ -12,8 +12,8 @@ def hello_world():
 
 @app.route("/upload", methods=['POST'])
 def updoad():
-	image_file.save = request.files["file"]
-	path = "{0}/{1}".format(image_dir, f.filename)
+	image_file = request.files["file"]
+	path = "{0}/{1}".format(image_dir, image_file.filename)
 	image_file.save(path)
 	history()
 	return json.dumps({"path":path})
@@ -26,7 +26,7 @@ def image(name):
 def history():
 	now = datetime.datetime.now()
 	fw = open('/workspace/Tutorial1/history/%s.txt' %now, 'wt', encoding="utf-8")
-	fw.write('æ˜∑ŒµÂ µ» Ω√∞£ : %s' %now)
+	fw.write('ÏóÖÎ°úÎìúÎêú ÎÇ†Ïßú : %s' %now)
 	fw.close()
 	
 	fr = open('/workspace/Tutorial1/history/%s.txt' %now, 'rt', encoding="utf-8")
@@ -34,3 +34,4 @@ def history():
 	print(text)
 	fr.close()
 	return
+
